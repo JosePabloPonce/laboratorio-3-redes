@@ -24,4 +24,4 @@ pip install xmpppy
 
 Run the client:
 
-python3 main.py
+py main.py
