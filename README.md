@@ -18,9 +18,11 @@ necesidades de desarrollo en redes.
 
 
 # How to install / Use it
-pip install slixmpp
-pip install aioconsole
-pip install xmpppy
+- pip install slixmpp
+- pip install aioconsole
+- pip install asyncio
+- pip install networkx
+
 
 Run the client:
 
