@@ -21,7 +21,7 @@ class Client(slixmpp.ClientXMPP):
         self.nodes = nodes #nodos a los que se esta dirigido
         self.distancia = 0 #inicializacion de distancia
         self.path = "" #variable para hacer calculos del camino
-        
+        self.bandera = True
         self.add_event_handler('session_start', self.start)
         self.add_event_handler('message', self.message)
         
@@ -83,21 +83,24 @@ class Client(slixmpp.ClientXMPP):
         message = msg.split('|')
         if message[0] == 'msg':
             if self.algoritmo == '1':
-                print('\nUsando algoritmo de enrutamiento Flooding')
-                print('\nReenviando Mensaje')
-
                 if str(message[2]) == str(self.jid):
-                    message[3] = message[3] + "," + str(self.nodo)
-                    lista = message[3].split(",")
-                    message[5] = str(len(lista)-1)
-                    print("Mensaje para mi: ", message)
+                    if(self.bandera == True):
+                        print('\nUsando algoritmo de enrutamiento Flooding')
+                        message[3] = message[3] + "," + str(self.nodo)
+                        lista = message[3].split(",")
+                        message[5] = str(len(lista)-1)
+                        print("Mensaje para mi: ", message)
+                        self.bandera = False
                 else:
+                    print('\nUsando algoritmo de enrutamiento Flooding')
+                    print('\nReenviando Mensaje')
                     lista = message[3].split(",")
                     if self.nodo not in lista:
                         message[3] = message[3] + "," + str(self.nodo)
                         StrMessage = "|".join(message)
                         for i in self.nodes:
-                            self.send_message(mto=self.names[i], mbody=StrMessage, mtype='chat' )  
+                            self.send_message(mto=self.names[i], mbody=StrMessage, mtype='chat' )
+  
 
             elif self.algoritmo == '2':
                 print('\nUsando algoritmo de enrutamiento Distance Vector')
