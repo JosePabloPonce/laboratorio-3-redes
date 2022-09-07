@@ -163,8 +163,8 @@ def Grafo(topo, names):
     
 if __name__ == "__main__":
 
-    topologia = open("topo.txt", "r", encoding="utf8")
-    nombres = open("names.txt", "r", encoding="utf8")
+    topologia = open("topologia.txt", "r", encoding="utf8")
+    nombres = open("nombres.txt", "r", encoding="utf8")
     topoF = yaml.load(topologia.read(), Loader=yaml.FullLoader)
     nombresF = yaml.load( nombres.read(), Loader=yaml.FullLoader)
 
