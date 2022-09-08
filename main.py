@@ -8,6 +8,7 @@ from aioconsole import ainput
 import networkx as nx
 import asyncio
 import yaml
+from shortest import dijkstra
 
 asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
@@ -47,12 +48,11 @@ class Client(slixmpp.ClientXMPP):
                             if (d['jid'] == to_user):
                                 final = p
              
-                        self.path=nx.shortest_path(xmpp.graph, inicio, final)
+                        self.path= dijkstra(xmpp.graph, inicio, final)
                         print("\nCamino:")
                         print(self.path)
                         self.path.pop(0)
                         mensaje = "msg|" + str(xmpp.jid) + "|" + str(to_user) + "|" + str(xmpp.nodo) + "|" + str(mensaje) + "|" + str(self.distancia) + "|" + ' '.join(self.path)
-                        print(mensaje)
                         sendto = self.path[0]
                         mail = ""
                         for (p, d) in xmpp.graph.nodes(data=True):
@@ -69,7 +69,7 @@ class Client(slixmpp.ClientXMPP):
                             if x[1]["jid"] == to_user:
                                 target.append(x)
                         mensaje = "msg|" + str(xmpp.jid) + "|" + str(to_user) + "|" + str(xmpp.nodo) + "|" + str(mensaje) + "|" + str(self.distancia)
-                        camino_corto = nx.shortest_path(xmpp.graph, source=xmpp.nodo, target=target[0][0])
+                        camino_corto = dijkstra(xmpp.graph, xmpp.nodo, target[0][0])
                         if len(camino_corto) > 0:
                             xmpp.send_message(mto=xmpp.names[camino_corto[1]], mbody=mensaje, mtype='chat' )
                     else:
@@ -146,7 +146,7 @@ class Client(slixmpp.ClientXMPP):
                             if x[1]["jid"] == message[2]:
                                 target.append(x)
                         
-                        camino_corto = nx.shortest_path(self.graph, source=self.nodo, target=target[0][0])
+                        camino_corto = dijkstra(self.graph, self.nodo, target[0][0])
                         print('Camino: ', camino_corto)
                         if len(camino_corto) > 0:
                             self.send_message(mto=self.names[camino_corto[1]], mbody=StrMessage, mtype='chat' )  
